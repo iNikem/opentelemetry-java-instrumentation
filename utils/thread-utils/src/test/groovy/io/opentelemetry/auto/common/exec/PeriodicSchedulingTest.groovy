@@ -17,17 +17,17 @@
 package io.opentelemetry.auto.common.exec
 
 import io.opentelemetry.auto.util.gc.GCUtils
-import io.opentelemetry.auto.util.test.AgentSpecification
 import spock.lang.Retry
 
 import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
+import spock.lang.Specification
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS
 
 @Retry
-class PeriodicSchedulingTest extends AgentSpecification {
+class PeriodicSchedulingTest extends Specification {
 
   def "test scheduling"() {
     setup:

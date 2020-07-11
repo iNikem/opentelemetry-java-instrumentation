@@ -17,6 +17,7 @@
 package io.opentelemetry.auto.test.utils
 
 import io.opentelemetry.auto.config.Config
+import io.opentelemetry.auto.test.AgentTestRunner
 import lombok.SneakyThrows
 
 import java.lang.reflect.Modifier
@@ -55,6 +56,7 @@ class ConfigUtils {
   static updateConfig(final Callable r) {
     r.call()
     resetConfig()
+    AgentTestRunner.resetInstrumentation()
   }
 
   /**

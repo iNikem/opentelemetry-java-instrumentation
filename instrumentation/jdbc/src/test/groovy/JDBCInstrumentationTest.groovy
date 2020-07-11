@@ -20,6 +20,7 @@ import com.zaxxer.hikari.HikariDataSource
 import io.opentelemetry.auto.instrumentation.jdbc.JDBCUtils
 import io.opentelemetry.auto.test.AgentTestRunner
 import io.opentelemetry.trace.attributes.SemanticAttributes
+import io.opentelemetry.auto.test.utils.ConfigUtils
 import org.apache.derby.jdbc.EmbeddedDataSource
 import org.apache.derby.jdbc.EmbeddedDriver
 import org.h2.Driver
@@ -43,8 +44,17 @@ import static io.opentelemetry.trace.Span.Kind.CLIENT
 
 class JDBCInstrumentationTest extends AgentTestRunner {
   static {
-    System.setProperty("ota.integration.jdbc-datasource.enabled", "true")
+    ConfigUtils.updateConfig {
+      System.setProperty("ota.integration.jdbc-datasource.enabled", "true")
+    }
   }
+
+  def specCleanup() {
+    ConfigUtils.updateConfig {
+      System.clearProperty("ota.integration.jdbc-datasource.enabled")
+    }
+  }
+
 
   @Shared
   def dbName = "jdbcUnitTest"
