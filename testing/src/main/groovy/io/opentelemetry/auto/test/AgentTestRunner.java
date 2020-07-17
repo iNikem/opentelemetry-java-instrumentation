@@ -78,7 +78,6 @@ import org.spockframework.runtime.model.SpecMetadata;
 @SpecMetadata(filename = "AgentTestRunner.java", line = 0)
 @Slf4j
 public abstract class AgentTestRunner extends AgentSpecification {
-  private static final long TIMEOUT_MILLIS = 10 * 1000;
   /**
    * For test runs, agent's global tracer will report to this list writer.
    *
@@ -148,10 +147,6 @@ public abstract class AgentTestRunner extends AgentSpecification {
   @BeforeClass
   public static synchronized void agentSetup() {
     if (activeTransformer == null) {
-      //    assert ServiceLoader.load(Instrumenter.class, AgentTestRunner.class.getClassLoader())
-      //            .iterator()
-      //            .hasNext()
-      //        : "No instrumentation found";
       activeTransformer =
           AgentInstaller.installBytebuddyAgent(INSTRUMENTATION, true, TEST_LISTENER);
     }

@@ -16,4 +16,9 @@
 
 package io.opentelemetry.auto.test;
 
+/**
+ * This interface serves as a junit category to mark tests requiring bytecode modifications.
+ *
+ * <p>The only real usage is for Gradle build to separate them from all other tests.
+ */
 public interface BytecodeTests {}
