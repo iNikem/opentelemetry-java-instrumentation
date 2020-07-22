@@ -1,52 +1,50 @@
 package io.opentelemetry.benchmark.storage;
 
+import java.net.HttpURLConnection;
+import java.net.URI;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
 
 @Fork(
     jvmArgsAppend = {
-        "-javaagent:/Users/nsalnikovtarnovski/Documents/workspace/opentelemetry-auto-instr-java/opentelemetry-javaagent/build/libs/opentelemetry-javaagent-0.5.0-SNAPSHOT-all.jar",
-        "-Dota.exporter=logging",
-        "-XX:+UseParallelOldGC",
-        "-Xmx2g",
-        "-XX:+AlwaysPreTouch"
-//        "-Dio.opentelemetry.auto.slf4j.simpleLogger.defaultLogLevel=debug"
+      "-javaagent:C:/git/opentelemetry-java-instrumentation/opentelemetry-javaagent/build/libs/opentelemetry-javaagent-0.7.0-SNAPSHOT-all.jar",
+      "-Dota.exporter=logging"
     })
+@State(Scope.Thread)
 public class StorageBenchmark {
 
-  @Benchmark
-  public int noStorage() {
-    return noStorageInternal(0);
-  }
+  private HttpURLConnection httpURLConnection;
+  private String value;
 
-  private int noStorageInternal(int input){
-    if (input < 500) {
-      return noStorageInternal(input + 1);
-    }
-    return input;
+  @Setup
+  public void setup() throws Exception {
+    httpURLConnection = (HttpURLConnection) new URI("https://google.com").toURL().openConnection();
+    value = "abc";
   }
 
   @Benchmark
-  public int context() {
-    return contextInternal(0);
-  }
-
-  private int contextInternal(int input){
-    if (input < 500) {
-      return contextInternal(input + 1);
-    }
-    return input;
+  public String noStorage() {
+    return value;
   }
 
   @Benchmark
-  public int field() {
-    return fieldInternal(0);
+  public String contextStorage() {
+    return contextStorageInstrumented(value);
   }
 
-  private int fieldInternal(int input){
-    if (input < 500) {
-      return fieldInternal(input + 1);
-    }
-    return input;
+  private String contextStorageInstrumented(String value) {
+    return value;
+  }
+
+  @Benchmark
+  public String fieldStorage() {
+    return fieldStorageInstrumented(httpURLConnection, value);
+  }
+
+  private String fieldStorageInstrumented(HttpURLConnection httpURLConnection, String value) {
+    return value;
   }
 }

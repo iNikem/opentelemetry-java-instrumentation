@@ -17,23 +17,18 @@
 package io.opentelemetry.instrumentation.storage;
 
 import io.grpc.Context;
-import io.opentelemetry.OpenTelemetry;
 import io.opentelemetry.auto.bootstrap.instrumentation.decorator.BaseDecorator;
-import io.opentelemetry.trace.Tracer;
 
 public class StorageDecorator extends BaseDecorator {
   public static final StorageDecorator DECORATE = new StorageDecorator();
-  public static final Tracer TRACER =
-      OpenTelemetry.getTracerProvider().get("io.opentelemetry.auto.storage");
 
-  static final Context.Key<Integer> CONTEXT_CLIENT_SPAN_KEY =
-      Context.key("some-key");
+  static final Context.Key<String> CONTEXT_CLIENT_SPAN_KEY = Context.key("some-key");
 
-  public Context attach(int value){
-    return Context.current().withValue(CONTEXT_CLIENT_SPAN_KEY, value + 1);
+  public Context attach(String value) {
+    return Context.current().withValue(CONTEXT_CLIENT_SPAN_KEY, value);
   }
 
-  public int getValue(Context context){
+  public String getValue(Context context) {
     return CONTEXT_CLIENT_SPAN_KEY.get(context);
   }
 }
